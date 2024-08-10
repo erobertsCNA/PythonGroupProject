@@ -1,0 +1,101 @@
+def create_video(title, duration, director, release_year, genre):
+    return {
+        "title": title,
+        "duration": duration,
+        "director": director,
+        "release_year": release_year,
+        "genre": genre}
+
+def create_library():
+    return []
+
+def add_video(library, video):
+    library.append(video)
+
+#def edit_video
+
+def remove_video(library, title):
+    return [video for video in library if video['title'] != title]
+
+def videoname(video):
+    return (f"{video['title']}")
+
+def video_information(video):
+    return (f"Title: {video['title']} Director: {video['director']},, Release Year: {video['release_year']}, Genre: {video['genre']} Duration: {video['duration']}")
+
+def save_library(library, filename='library.txt'):
+    with open(filename, 'w') as f:
+        for video in library:
+            f.write(f"{video['title']}|{video['duration']}|{video['director']}|{video['release_year']}|{video['genre']}\n")
+
+def load_library(filename='library.txt'):
+    library = []
+    try:
+        with open(filename, 'r') as f:
+            for line in f:
+                title, duration, director, release_year, genre = line.strip().split('|')
+                library.append(create_video(title, duration, director, release_year, genre))
+    except FileNotFoundError:
+        print(".")
+    return library
+
+def main_menu():
+    library = load_library()
+
+    while True:
+        print("\nWelcome to the Video Library Management System")
+        print("Choose from the options below:\n")
+        print("1. Add new video")
+        print("2. Edit Video")
+        print("3. Delete Video")
+        print("4. Display all videos by name.")
+        print("5. Display detailed video information.")
+        print("6. List videos by criteria.")
+        print("7. Exit")
+
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            title = input("Enter title: ")
+            director = input("Enter director: ")
+            release_year = input("Enter release year: ")
+            genre = input("Enter genre: ")
+            duration = input("Enter duration (in minutes): ")
+            video = create_video(title, duration, director, release_year, genre)
+            add_video(library, video)
+            print("Video added successfully!")
+        #elif choice == '2':
+            
+        elif choice == '3':
+            title = input("Enter the title of the video to remove: ")
+            library = remove_video(library, title)
+        elif choice == '4':
+            for video in library:
+                print(videoname(video))
+        elif choice == '5':
+            for video in library:
+                print(video_information(video))
+        elif choice == '6':
+            print("The following criteria is available:")
+            print("\t1. Director. ")
+            print("\t2. Release Year. ")
+            print("\t3. Genre. ")
+            print("\t4. Duration. ")
+            six_choice = int(input("Enter Criteria: "))
+            if six_choice == '1':
+                print(f"{title}")
+            elif six_choice == '2':
+                print(f"{release_year}")
+            elif six_choice == '3':
+                print(f"{genre}")
+            elif six_choice == '4':
+                print(f"{duration}")
+        
+        elif choice == '7':
+            print("Thank you for using the Video Library Management System!")
+            save_library(library)
+            break
+        else:
+            print("Invalid choice. Please choose again.")
+
+if __name__ == "__main__":
+    main_menu()
